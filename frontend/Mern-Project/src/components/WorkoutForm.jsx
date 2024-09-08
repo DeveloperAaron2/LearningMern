@@ -21,7 +21,6 @@ const response = await fetch('http://localhost:4000/api/workouts', {
 const data = await response.json();
 if (!response.ok) {
     setError(data.error);
-    console.log(data.emptyFiedls);  // Ensure emptyFields is always an array
     setEmptyFields(data.emptyFiedls);  // Ensure emptyFields is always an array
 }
 
