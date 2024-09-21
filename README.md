@@ -77,7 +77,7 @@ LearningMern
 ⚙️ Installation & Setup
 Clone the repository
 bash
-git clone https://github.com/your-username/workout-tracker.git
+git clone https://github.com/DeveloperAaron2/LearningMern.git
 cd workout-tracker
 Install dependencies
 Backend:
