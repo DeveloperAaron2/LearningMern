@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext";
+import { useAuthContext } from "../hooks/useAuthContext";
+
 
 export const WorkoutForm = () => {
     const { dispatch } = useWorkoutsContext();
@@ -8,32 +10,38 @@ export const WorkoutForm = () => {
     const [reps, setReps] = useState('');
     const [error, setError] = useState(null);
     const [emptyFields, setEmptyFields] = useState([]);
+    const {user} = useAuthContext();
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newWorkout = { title, load, reps };
-const response = await fetch('http://localhost:4000/api/workouts', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(newWorkout)
-});
-const data = await response.json();
-if (!response.ok) {
-    setError(data.error);
-    setEmptyFields(data.emptyFiedls);  // Ensure emptyFields is always an array
-}
+        e.preventDefault();
+        if(!user){
+            setError('Please log in to add a workout.');
+            return;
+        } 
+        const newWorkout = { title, load, reps };
+        const response = await fetch('http://localhost:4000/api/workouts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
+            },
+            body: JSON.stringify(newWorkout)
+        });
+        console.log(user.token);
+        const data = await response.json();
+        if (!response.ok) {
+            setError(data.error);
+            setEmptyFields(data.emptyFiedls);  // Ensure emptyFields is always an array
+        }
 
-if (response.ok) {
-    setTitle('');
-    setLoad('');
-    setReps('');
-    setEmptyFields([]);
-    setError(null);  // Reset error message after successful submission
-    console.log('New workout added: ' + data);
-    dispatch({ type: 'ADD_WORKOUT', payload: data });
-}
-
+        if (response.ok) {
+            setTitle('');
+            setLoad('');
+            setReps('');
+            setEmptyFields([]);
+            setError(null);  // Reset error message after successful submission
+            console.log('New workout added: ' + data);
+            dispatch({ type: 'ADD_WORKOUT', payload: data });
+        }
     }
     return (
         <form onSubmit={handleSubmit}>
