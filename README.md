@@ -108,7 +108,7 @@ bash
 
 cd frontend
 npm run dev
-Access the application: Open your browser and go to http://localhost:3000.
+Access the application: Open your browser and go to http://localhost:4000.
 🧪 API Endpoints
 User Routes
 POST /api/users/register – Register a new user.
